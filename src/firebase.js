@@ -1,12 +1,12 @@
 import firebase from 'firebase';
 
 const config = {
-  apiKey: "AIzaSyCFxIZs0EdWf-SxW_z5-mowNTYPq4DzWZQ",
-  authDomain: "myrecipes-e3d37.firebaseapp.com",
-  databaseURL: "https://myrecipes-e3d37.firebaseio.com",
-  projectId: "myrecipes-e3d37",
-  storageBucket: "myrecipes-e3d37.appspot.com",
-  messagingSenderId: "834766130820"
+  apiKey: "AIzaSyDW89eDLDGApk53nM98YJh1iaggDX02ZhU",
+  authDomain: "kiosk-smart-city.firebaseapp.com",
+  databaseURL: "https://kiosk-smart-city.firebaseio.com",
+  projectId: "kiosk-smart-city",
+  storageBucket: "kiosk-smart-city.appspot.com",
+  messagingSenderId: "99717802343"
 };
 firebase.initializeApp(config);
 export default firebase;

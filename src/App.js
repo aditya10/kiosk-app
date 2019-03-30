@@ -1,17 +1,3 @@
-/*
-(c) Aditya Chinchure, 2018
-Developed using ReactJS, Google Firebase
-Please use your own firebase account by configuring
-it in src/firebase.js
-
-TODO:
-- when delete happens, also delete the picture from Storage
-- Implement update using a new compnonent
-- implement authentication for mult-user support
-- enable support for back button in browser
-*/
-
-
 import React, { Component } from 'react';
 import './App.css';
 import { AddRecipe } from './AddRecipe';
@@ -41,8 +27,8 @@ class App extends Component {
     for (let item in items) {
       newState.push({
           id: item,
-          recipeName: items[item].recipeName,
-          pictureLink: items[item].pictureLink
+          name: items[item].name,
+          category: items[item].category
         });
       }
       this.setState({
@@ -52,7 +38,6 @@ class App extends Component {
     });
   }
   handleSelect(itemID){
-    console.log(itemID);
     this.setState({recipeID: itemID, displayRecipe: true});
   }
   handleClose(){
@@ -64,36 +49,23 @@ class App extends Component {
   handleAdd(){
     this.setState({addRecipe: true});
   }
-  removeItem(itemId) {
-    const itemRef = firebase.database().ref(`/items/${itemId}`);
-    itemRef.remove();
-  }
   render() {
     let disp;
-    if(this.state.addRecipe){
-      disp = (
-        <div>
-        <AddRecipe />
-        <button className="closeAddButton" onClick={this.handleCloseAddRecipe}>Close</button>
-        </div>
-    );
-    }
-    else if (!this.state.addRecipe && !this.state.displayRecipe){
+    if (!this.state.addRecipe && !this.state.displayRecipe){
       disp = (
         <section className="recipe-bits">
+          <div className="statusMap"><img src="./"/></div>
+          <div className="title">Here are some jobs you may like</div>
         <div className='wrapper'>
           <ul>
             {this.state.items.map((item) => {
               return (
-                <li className='col-md-4 col-sm-12'>
+                <li className='col-md-12 col-sm-12'>
                   <div className="recipe-bit">
                   <tbody className='table'>
-                    <tr><td className='imgHolder' colSpan="2"><img alt="" src={item.pictureLink}/></td>
-                    </tr>
-                    <tr>
-                      <td className='rName'>{item.recipeName}</td>
-                      <td className='rButton'><button onClick={() => this.handleSelect(item.id)}>View</button>
-                                              <button onClick={() => this.removeItem(item.id)}>Remove</button></td>
+                    <tr className='rRow'>
+                      <td className='rName'>{item.name+" ("+item.category+")"}</td>
+                      <td className='rButton'><button onClick={() => this.handleSelect(item.id)}>View</button></td>
                     </tr>
                   </tbody>
                 </div>
@@ -101,7 +73,6 @@ class App extends Component {
               )
             })}
         </ul>
-        <button className="addButton" onClick={this.handleAdd}>+</button>
         </div>
       </section>
       );
@@ -109,21 +80,15 @@ class App extends Component {
     else if (this.state.displayRecipe){
       disp = (
         <div>
-        <DisplayRecipe item={this.state.recipeID}/>
-        <button className="closeDisplayButton" onClick={this.handleClose}>Close</button>
+          <DisplayRecipe item={this.state.recipeID}/>
+          <button className="closeDisplayButton" onClick={this.handleClose}>Close</button>
         </div>
       );
     }
 
     return (
       <div className='app'>
-        <header>
-            <div className='header'>
-              <h1>Recipe Book</h1>
-            </div>
-        </header>
         {disp}
-        <div className="spacer"></div>
       </div>
     );
   }

@@ -7,20 +7,18 @@ export class AddRecipe extends Component {
   constructor() {
     super();
     this.state = {
-      recipeName: '',
-      time: '',
-      ingredients: '',
-      procedure: '',
-      recipeLink: '',
-      localImg: ''
-    }
+      name: '',
+      hours: '',
+      category: '',
+      pay: '',
+      description: '',
+      location: ''
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleImageSelect = this.handleImageSelect.bind(this);
     this.uploadEverything = this.uploadEverything.bind(this);
-    this.downloadURL = '';
   }
-
 
   handleChange(e) {
     this.setState({
@@ -28,17 +26,15 @@ export class AddRecipe extends Component {
     });
   }
 
-
   handleImageSelect(e){
       console.log("handle image select");
       this.setState({localImg: e.target.files[0]})
       console.log("handle image select dd"+this.state.localImg);
   }
 
-
   handleSubmit(e) {
     e.preventDefault();
-    console.log('Event occured');
+    console.log('Event occurred');
     console.log("Submitting image with address "+this.state.localImg);
     if(this.state.recipeName === ''){
       alert("Error: requires name");
@@ -48,36 +44,26 @@ export class AddRecipe extends Component {
       this.uploadEverything();
       return
     }
-    const storage = firebase.storage();
-    const storageRef = storage.ref();
-    storageRef.child('images-'+this.state.recipeName).put(this.state.localImg)
-      .then(function(snapshot){
-        this.downloadURL = snapshot.downloadURL;
-        console.log('File available at', this.downloadURL);
-        this.uploadEverything();
-      }.bind(this));
   }
 
   uploadEverything(){
-    console.log('Trial');
     const itemsRef = firebase.database().ref('items');
     const item = {
-      recipeName: this.state.recipeName,
-      time: this.state.time,
-      ingredients: this.state.ingredients,
-      procedure: this.state.procedure,
-      recipeLink: this.state.recipeLink,
-      pictureLink: this.downloadURL
+      name: this.state.name,
+      hours: this.state.hours,
+      category: this.state.category,
+      pay: this.state.pay,
+      description: this.state.description,
+      location: this.state.location
     };
-    console.log('Pic available at', this.downloadURL);
     itemsRef.push(item);
     this.setState({
-      recipeName: '',
-      time: '',
-      ingredients: '',
-      procedure: '',
-      recipeLink: '',
-      pictureLink: ''
+      name: '',
+      hours: '',
+      category: '',
+      pay: '',
+      description: '',
+      location: ''
     });
   }
 
@@ -92,7 +78,7 @@ export class AddRecipe extends Component {
                 <textarea className="mediumInput" type="text" name="ingredients" placeholder="List ingredients here" onChange={this.handleChange} value={this.state.ingredients}/>
                 <textarea className="largeInput" type="text" name="procedure" placeholder="Enter procedure here" onChange={this.handleChange} value={this.state.procedure}/>
                 <input className="smallInput" type="text" name="recipeLink" placeholder="Additional link to recipe" onChange={this.handleChange} value={this.state.recipeLink}/>
-                <input className="smallInput" type="file" name="picture" accept="image/*" onChange={this.handleImageSelect} />
+                <input className="smallInput" type="text" name="picture" accept="image/*" onChange={this.handleImageSelect} />
                 <button><span>Add Item</span></button>
               </form>
           </section>
